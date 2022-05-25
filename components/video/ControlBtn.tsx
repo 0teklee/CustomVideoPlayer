@@ -5,35 +5,30 @@ import Image from "next/image";
 import FlexBox from "components/common/FlexBox";
 import Button from "components/common/Button";
 import { PropInterface } from "util/PropsInterface";
+import Timer from "./Timer";
 
-const ControlBtn = ({
-  currentTime,
-  totalTime,
-  videoElement,
-  isPlaying,
-  setIsPlaying,
-}: PropInterface) => {
-  // const currentTime = videoElement && videoElement.currentTime;
-  // const totalTime = videoElement && videoElement.duration;
+const ControlBtn = ({ videoElement }: PropInterface) => {
+  // play icon state
+  const [isPlaying, setIsPlaying] = useState(false);
 
   // buttonState
   const [isSound, setIsSound] = useState(true);
   const [isVolume, setIsVolume] = useState(false);
 
   // 시간 표시 함수
-  const timeConvert = (a: number | null | undefined): string => {
-    if (!a) a = 0;
-    let min: number | string = Math.floor(a / 60);
-    let sec: number | string = Math.floor(a % 60);
 
-    if (min < 10) min = `0${min}`;
-    if (sec < 10) sec = `0${sec}`;
-
-    return `${min}:${sec}`;
+  // 재생 state
+  const handlePlayEent = () => {
+    if (videoElement) {
+      if (!isPlaying) {
+        videoElement?.play();
+        setIsPlaying((prev) => !prev);
+      } else {
+        videoElement?.pause();
+        setIsPlaying((prev) => !prev);
+      }
+    }
   };
-  console.log("time updated");
-  const current = timeConvert(currentTime);
-  const total = timeConvert(totalTime);
 
   // volume 조절
   const [volume, setVolume] = useState(0);
@@ -48,6 +43,11 @@ const ControlBtn = ({
       volumeRef.current.value = String(volume);
     }
   }, [isVolume]);
+
+  // 재생 / 정지 이벤트 추가
+  useEffect(() => {
+    videoElement?.addEventListener("click", handlePlayEent);
+  }, []);
 
   return (
     <FlexBox justifyContent="space-between">
@@ -66,7 +66,7 @@ const ControlBtn = ({
         </Button>
         <Button
           onClick={() => {
-            if (videoElement && currentTime) videoElement.currentTime -= 5;
+            if (videoElement) videoElement.currentTime -= 5;
           }}
         >
           <Image
@@ -111,7 +111,7 @@ const ControlBtn = ({
         )}
         <Button
           onClick={() => {
-            if (videoElement && currentTime) videoElement.currentTime += 5;
+            if (videoElement) videoElement.currentTime += 5;
           }}
         >
           <Image
@@ -123,7 +123,7 @@ const ControlBtn = ({
         </Button>
         <Button
           onClick={() => {
-            if (videoElement && totalTime) videoElement.currentTime = totalTime;
+            if (videoElement) videoElement.currentTime = videoElement.duration;
           }}
         >
           <Image
@@ -133,9 +133,7 @@ const ControlBtn = ({
             alt="end"
           />
         </Button>
-        <TimeStamp>
-          {current} / {total}
-        </TimeStamp>
+        <Timer videoElement={videoElement} />
       </FlexBox>
       <FlexBox>
         <SoundEventWrapper

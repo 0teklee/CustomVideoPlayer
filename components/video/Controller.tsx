@@ -3,18 +3,16 @@ import ProgressBar from "./ProgressBar";
 
 import ControlBtn from "./ControlBtn";
 import styled from "styled-components";
-import { PropInterface } from "util/PropsInterface";
+import { ControllerInterface } from "util/PropsInterface";
 import { useEffect, useState } from "react";
 
 const Controller = ({
-  currentTime,
-  totalTime,
-  showControl,
-  videoElement,
-}: // isPlaying,
-// setIsPlaying,
-PropInterface) => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  videoContainerRef,
+  videoRef,
+  srcRef,
+  srcOrigin,
+  srcAd,
+}: ControllerInterface) => {
   const [showControl, setShowControl] = useState(false);
   const [hideCursor, setHideCursor] = useState(false);
   const [coords, setCoords] = useState({ x: 0, y: 0 });
@@ -24,39 +22,36 @@ PropInterface) => {
     adTime: 0,
     adLoaded: false,
   });
-
-  const playEventHandler = () => {
-    if (!isPlaying) {
-      videoElement?.play();
-      setIsPlaying((prev) => !prev);
-    } else {
-      videoElement?.pause();
-      setIsPlaying((prev) => !prev);
-    }
-  };
+  const [current, setCurrent] = useState(0);
+  const totalTime = videoRef?.current?.duration;
 
   // 키보드 이벤트 핸들러
   const handleKeyDown = (e: React.KeyboardEvent): void => {
     switch (e.code) {
       case "ArrowLeft":
-        if (videoElement) videoElement.currentTime -= 5;
+        videoRef.current!.currentTime -= 5;
         break;
       case "ArrowRight":
-        if (videoElement) videoElement.currentTime += 5;
+        videoRef.current!.currentTime += 5;
         break;
       case "Space":
-        if (videoElement) {
-          if (isPlaying) {
-            videoElement.pause();
-            setIsPlaying && setIsPlaying(false);
-          } else {
-            videoElement.play();
-            setIsPlaying && setIsPlaying(true);
-          }
+        if (videoRef.current!.paused) {
+          videoRef.current?.play();
+        } else {
+          videoRef.current?.pause();
         }
+
         break;
       default:
         return;
+    }
+  };
+
+  const handleVideoClick = () => {
+    if (videoRef.current!.paused) {
+      videoRef.current!.play();
+    } else {
+      videoRef.current!.pause();
     }
   };
 
@@ -65,14 +60,6 @@ PropInterface) => {
     setHideCursor(false);
     setCoords({ x: e.screenX, y: e.screenY });
   };
-
-  useEffect(() => {
-    const timeOut = setTimeout(() => {
-      setShowControl(false);
-      setHideCursor(true);
-    }, 3000);
-    return () => clearTimeout(timeOut);
-  }, [coords]);
 
   // 타임아웃 useEffect
   useEffect(() => {
@@ -88,19 +75,19 @@ PropInterface) => {
   // 30초 이후 광고 불러오도록 트리거
   useEffect(() => {
     if (isAdPlayed) return;
-    if (currentTime && 30 < currentTime) {
-      setAdTime({ ...adTime, originTime: currentTime + 5 });
+    if (30 < current) {
+      setAdTime({ ...adTime, originTime: current + 5 });
       setIsAdPlayed(true);
     }
-  }, [currentTime]);
+  }, [current]);
 
   // 광고 로드
   useEffect(() => {
-    if (!adTime.adLoaded && srcElement) {
+    if (!adTime.adLoaded && isAdPlayed) {
       setTimeout(() => {
-        srcElement.src = srcCommercial;
-        videoElement?.load();
-        videoElement?.play();
+        srcRef.current!.src = srcAd;
+        videoRef?.current?.load();
+        videoRef?.current?.play();
         setAdTime({ ...adTime, adLoaded: true });
       }, 5000);
     }
@@ -108,39 +95,39 @@ PropInterface) => {
 
   // 광고 종료 이후 원래 위치로 돌아가기
   useEffect(() => {
-    if (
-      videoElement &&
-      srcElement &&
-      srcElement.src === srcCommercial &&
-      currentTime === totalTime
-    ) {
-      srcElement.src = srcOrigin;
-      videoElement?.load();
-      videoElement.currentTime = adTime.originTime;
-      videoElement?.play();
+    if (srcRef.current!.src === srcAd && current === totalTime) {
+      srcRef.current!.src = srcOrigin;
+      videoRef.current!.load();
+      videoRef.current!.currentTime = adTime.originTime;
+      videoRef.current!.play();
       setIsAdPlayed(true);
-      setIsPlaying(true);
     }
-  }, [currentTime]);
+  }, [current]);
   // 광고 카운터
   // const adCounter = (a : number) : number => {
 
   // }
 
+  useEffect(() => {
+    videoContainerRef.current?.addEventListener("mouseenter", () => {
+      setShowControl(true);
+    });
+    videoRef?.current?.addEventListener("click", handleVideoClick);
+
+    videoRef.current?.addEventListener("timeupdate", () => {
+      setCurrent(videoRef.current!.currentTime);
+    });
+
+    return () => {
+      return videoContainerRef?.current?.addEventListener("mouseenter", () => {
+        setShowControl(true);
+      });
+    };
+  }, [videoContainerRef, videoRef]);
   return (
     <Container showControl={showControl}>
-      <ProgressBar
-        currentTime={currentTime}
-        totalTime={totalTime}
-        videoElement={videoElement}
-      />
-      <ControlBtn
-        videoElement={videoElement}
-        currentTime={currentTime}
-        totalTime={totalTime}
-        isPlaying={isPlaying}
-        setIsPlaying={setIsPlaying}
-      />
+      <ProgressBar videoRef={videoRef} />
+      <ControlBtn videoRef={videoRef} />
     </Container>
   );
 };
@@ -155,4 +142,4 @@ const Container = styled.div<{ showControl?: boolean }>`
   bottom: 1px;
 `;
 
-export default memo(Controller);
+export default Controller;
