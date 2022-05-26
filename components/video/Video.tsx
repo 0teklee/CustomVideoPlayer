@@ -18,6 +18,11 @@ const Video = () => {
   const videoContainerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const srcRef = useRef<HTMLSourceElement>(null);
+  // const forwardRefProp = {
+  //   container: videoContainerRef,
+  //   video: videoRef,
+  //   src: srcRef,
+  // };
 
   // // video source 링크
   const srcOrigin =
@@ -36,11 +41,12 @@ const Video = () => {
         </VideoWrapper>
         {/* {isAdPlayed && !adTime.adLoaded && <AdNotice time={1} />} */}
         <Controller
-          videoContainerRef={videoContainerRef}
-          videoRef={videoRef}
+          // videoContainerRef={videoContainerRef}
+          // videoRef={videoRef}
           srcRef={srcRef}
           srcOrigin={srcOrigin}
           srcAd={srcAd}
+          ref={videoRef}
         />
       </Container>
     </Layout>

@@ -27,7 +27,6 @@ const Timer = ({ videoElement }: PropInterface) => {
         setCurrent(videoElement.currentTime);
       });
   }, [videoElement]);
-  console.log("timer component mount");
   return (
     <TimeStamp>
       {" "}

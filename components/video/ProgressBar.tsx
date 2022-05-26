@@ -1,13 +1,11 @@
 import styled from "styled-components";
-import { PropInterface } from "util/PropsInterface";
+import { VideoPropInterface } from "util/PropsInterface";
 import { memo, useEffect, useState } from "react";
 
 const ProgressBar = ({
-  videoElement,
-  totalTime,
-  currentTime,
+  videoRef,
 }: //  totalTime
-PropInterface) => {
+VideoPropInterface) => {
   // const currentTime = videoElement && Math.floor(videoElement.currentTime);
   // const totalTime =
   //   videoElement && videoElement.duration && Math.floor(videoElement.duration);

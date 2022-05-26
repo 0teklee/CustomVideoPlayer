@@ -1,18 +1,14 @@
-import { memo } from "react";
+import React, { memo } from "react";
 import ProgressBar from "./ProgressBar";
-
 import ControlBtn from "./ControlBtn";
 import styled from "styled-components";
 import { ControllerInterface } from "util/PropsInterface";
 import { useEffect, useState } from "react";
 
-const Controller = ({
-  videoContainerRef,
-  videoRef,
-  srcRef,
-  srcOrigin,
-  srcAd,
-}: ControllerInterface) => {
+const ControllerComponent = (
+  { srcOrigin, srcAd, srcRef }: ControllerInterface,
+  ref: React.RefObject<HTMLVideoElement>
+) => {
   const [showControl, setShowControl] = useState(false);
   const [hideCursor, setHideCursor] = useState(false);
   const [coords, setCoords] = useState({ x: 0, y: 0 });
@@ -23,22 +19,24 @@ const Controller = ({
     adLoaded: false,
   });
   const [current, setCurrent] = useState(0);
-  const totalTime = videoRef?.current?.duration;
+  const videoRef = ref.current;
+  const videoContainerRef = ref.current!.parentElement;
+  const totalTime = videoRef!.duration;
 
   // 키보드 이벤트 핸들러
   const handleKeyDown = (e: React.KeyboardEvent): void => {
     switch (e.code) {
       case "ArrowLeft":
-        videoRef.current!.currentTime -= 5;
+        videoRef!.currentTime -= 5;
         break;
       case "ArrowRight":
-        videoRef.current!.currentTime += 5;
+        videoRef!.currentTime += 5;
         break;
       case "Space":
-        if (videoRef.current!.paused) {
-          videoRef.current?.play();
+        if (videoRef!.paused) {
+          videoRef!.play();
         } else {
-          videoRef.current?.pause();
+          videoRef!.pause();
         }
 
         break;
@@ -48,10 +46,10 @@ const Controller = ({
   };
 
   const handleVideoClick = () => {
-    if (videoRef.current!.paused) {
-      videoRef.current!.play();
+    if (videoRef!.paused) {
+      videoRef!.play();
     } else {
-      videoRef.current!.pause();
+      videoRef!.pause();
     }
   };
 
@@ -86,8 +84,8 @@ const Controller = ({
     if (!adTime.adLoaded && isAdPlayed) {
       setTimeout(() => {
         srcRef.current!.src = srcAd;
-        videoRef?.current?.load();
-        videoRef?.current?.play();
+        videoRef!.load();
+        videoRef!.play();
         setAdTime({ ...adTime, adLoaded: true });
       }, 5000);
     }
@@ -97,9 +95,9 @@ const Controller = ({
   useEffect(() => {
     if (srcRef.current!.src === srcAd && current === totalTime) {
       srcRef.current!.src = srcOrigin;
-      videoRef.current!.load();
-      videoRef.current!.currentTime = adTime.originTime;
-      videoRef.current!.play();
+      videoRef!.load();
+      videoRef!.currentTime = adTime.originTime;
+      videoRef!.play();
       setIsAdPlayed(true);
     }
   }, [current]);
@@ -109,26 +107,30 @@ const Controller = ({
   // }
 
   useEffect(() => {
-    videoContainerRef.current?.addEventListener("mouseenter", () => {
+    videoContainerRef!.addEventListener("mouseenter", () => {
       setShowControl(true);
     });
-    videoRef?.current?.addEventListener("click", handleVideoClick);
+    videoRef!.addEventListener("click", handleVideoClick);
 
-    videoRef.current?.addEventListener("timeupdate", () => {
-      setCurrent(videoRef.current!.currentTime);
+    videoRef!.addEventListener("timeupdate", () => {
+      setCurrent(videoRef!.currentTime);
     });
 
     return () => {
-      return videoContainerRef?.current?.addEventListener("mouseenter", () => {
+      return videoContainerRef!.addEventListener("mouseenter", () => {
         setShowControl(true);
       });
     };
   }, [videoContainerRef, videoRef]);
   return (
-    <Container showControl={showControl}>
-      <ProgressBar videoRef={videoRef} />
-      <ControlBtn videoRef={videoRef} />
-    </Container>
+    <>
+      <button onClick={() => console.log(ref)}>클릭</button>
+
+      <Container showControl={showControl}>
+        <ProgressBar ref={videoRef} />
+        <ControlBtn ref={videoRef} />
+      </Container>
+    </>
   );
 };
 
@@ -141,5 +143,7 @@ const Container = styled.div<{ showControl?: boolean }>`
   position: absolute;
   bottom: 1px;
 `;
+
+const Controller = React.forwardRef(ControllerComponent);
 
 export default Controller;

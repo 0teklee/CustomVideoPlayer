@@ -7,7 +7,7 @@ import Button from "components/common/Button";
 import { PropInterface } from "util/PropsInterface";
 import Timer from "./Timer";
 
-const ControlBtn = ({ videoElement }: PropInterface) => {
+const ControlBtn = (ref: ) => {
   // play icon state
   const [isPlaying, setIsPlaying] = useState(false);
 
