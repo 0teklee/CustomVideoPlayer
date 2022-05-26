@@ -15,20 +15,20 @@ import Spinner from "components/common/Spinner";
 import AdNotice from "./AdNotice";
 
 const Video = () => {
-  // const [isPlaying, setIsPlaying] = useState(false);
-  // const [currentTime, setCurrentTime] = useState(0);
-  // const [showControl, setShowControl] = useState(false);
-  // const [hideCursor, setHideCursor] = useState(false);
-  // const [coords, setCoords] = useState({ x: 0, y: 0 });
-  // const [isAdPlayed, setIsAdPlayed] = useState(false);
-  // const [adTime, setAdTime] = useState({
-  //   originTime: 0,
-  //   adTime: 0,
-  //   adLoaded: false,
-  // });
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [showControl, setShowControl] = useState(false);
+  const [hideCursor, setHideCursor] = useState(false);
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const [isAdPlayed, setIsAdPlayed] = useState(false);
+  const [adTime, setAdTime] = useState({
+    originTime: 0,
+    adTime: 0,
+    adLoaded: false,
+  });
   const ref = useRef<HTMLVideoElement>(null);
   const videoElement = ref && ref.current;
-  const currentTime = ref && ref.current && Math.floor(ref.current.currentTime);
+  // const currentTime = ref && ref.current && Math.floor(ref.current.currentTime);
   const totalTime = ref && ref.current && Math.floor(ref.current.duration);
   const srcRef = useRef<HTMLSourceElement>(null);
   const srcElement = srcRef && srcRef.current;
@@ -42,98 +42,98 @@ const Video = () => {
   const videoLoading = videoElement?.networkState;
 
   //  클릭시 setState 이벤트 핸들러
-  // const playEventHandler = () => {
-  //   if (!isPlaying) {
-  //     videoElement?.play();
-  //     setIsPlaying((prev) => !prev);
-  //   } else {
-  //     videoElement?.pause();
-  //     setIsPlaying((prev) => !prev);
-  //   }
-  // };
+  const playEventHandler = () => {
+    if (!isPlaying) {
+      videoElement?.play();
+      setIsPlaying((prev) => !prev);
+    } else {
+      videoElement?.pause();
+      setIsPlaying((prev) => !prev);
+    }
+  };
 
   // // 키보드 이벤트 핸들러
-  // const handleKeyDown = (e: React.KeyboardEvent): void => {
-  //   switch (e.code) {
-  //     case "ArrowLeft":
-  //       if (videoElement) videoElement.currentTime -= 5;
-  //       break;
-  //     case "ArrowRight":
-  //       if (videoElement) videoElement.currentTime += 5;
-  //       break;
-  //     case "Space":
-  //       if (videoElement) {
-  //         if (isPlaying) {
-  //           videoElement.pause();
-  //           setIsPlaying && setIsPlaying(false);
-  //         } else {
-  //           videoElement.play();
-  //           setIsPlaying && setIsPlaying(true);
-  //         }
-  //       }
-  //       break;
-  //     default:
-  //       return;
-  //   }
-  // };
+  const handleKeyDown = (e: React.KeyboardEvent): void => {
+    switch (e.code) {
+      case "ArrowLeft":
+        if (videoElement) videoElement.currentTime -= 5;
+        break;
+      case "ArrowRight":
+        if (videoElement) videoElement.currentTime += 5;
+        break;
+      case "Space":
+        if (videoElement) {
+          if (isPlaying) {
+            videoElement.pause();
+            setIsPlaying && setIsPlaying(false);
+          } else {
+            videoElement.play();
+            setIsPlaying && setIsPlaying(true);
+          }
+        }
+        break;
+      default:
+        return;
+    }
+  };
 
   // 마우스 움직임 3초 이상 없으면 컨트롤 표시 X
 
   // 핸들러
-  // const handleMouseMove = (e: React.MouseEvent) => {
-  //   setShowControl(true);
-  //   setHideCursor(false);
-  //   setCoords({ x: e.screenX, y: e.screenY });
-  // };
+  const handleMouseMove = (e: React.MouseEvent) => {
+    setShowControl(true);
+    setHideCursor(false);
+    setCoords({ x: e.screenX, y: e.screenY });
+  };
 
   // 타임아웃 useEffect
-  // useEffect(() => {
-  //   const timeOut = setTimeout(() => {
-  //     setShowControl(false);
-  //     setHideCursor(true);
-  //   }, 3000);
-  //   return () => clearTimeout(timeOut);
-  // }, [coords]);
+  useEffect(() => {
+    const timeOut = setTimeout(() => {
+      setShowControl(false);
+      setHideCursor(true);
+    }, 3000);
+    return () => clearTimeout(timeOut);
+  }, [coords]);
 
   // 광고 기능
 
   // 30초 이후 광고 불러오도록 트리거
-  // useEffect(() => {
-  //   if (isAdPlayed) return;
-  //   if (currentTime && 30 < currentTime) {
-  //     setAdTime({ ...adTime, originTime: currentTime + 5 });
-  //     setIsAdPlayed(true);
-  //   }
-  // }, [currentTime]);
+  useEffect(() => {
+    if (isAdPlayed) return;
+    if (currentTime && 30 < currentTime) {
+      setAdTime({ ...adTime, originTime: currentTime + 5 });
+      setIsAdPlayed(true);
+    }
+  }, [currentTime]);
 
   // 광고 로드
-  // useEffect(() => {
-  //   if (!adTime.adLoaded && srcElement) {
-  //     setTimeout(() => {
-  //       srcElement.src = srcCommercial;
-  //       videoElement?.load();
-  //       videoElement?.play();
-  //       setAdTime({ ...adTime, adLoaded: true });
-  //     }, 5000);
-  //   }
-  // }, [isAdPlayed]);
+  useEffect(() => {
+    if (!adTime.adLoaded && srcElement) {
+      setTimeout(() => {
+        srcElement.src = srcCommercial;
+        videoElement?.load();
+        videoElement?.play();
+        setAdTime({ ...adTime, adLoaded: true });
+      }, 5000);
+    }
+  }, [isAdPlayed]);
 
   // 광고 종료 이후 원래 위치로 돌아가기
-  // useEffect(() => {
-  //   if (
-  //     videoElement &&
-  //     srcElement &&
-  //     srcElement.src === srcCommercial &&
-  //     currentTime === totalTime
-  //   ) {
-  //     srcElement.src = srcOrigin;
-  //     videoElement?.load();
-  //     videoElement.currentTime = adTime.originTime;
-  //     videoElement?.play();
-  //     setIsAdPlayed(true);
-  //     setIsPlaying(true);
-  //   }
-  // }, [currentTime]);
+  useEffect(() => {
+    if (
+      videoElement &&
+      srcElement &&
+      srcElement.src === srcCommercial &&
+      currentTime === totalTime
+    ) {
+      srcElement.src = srcOrigin;
+      videoElement?.load();
+      videoElement.currentTime = adTime.originTime;
+      videoElement?.play();
+      setIsAdPlayed(true);
+      setIsPlaying(true);
+    }
+  }, [currentTime]);
   // 광고 카운터
   // const adCounter = (a : number) : number => {
 
@@ -143,28 +143,28 @@ const Video = () => {
     <Layout>
       <Container
         id="container"
-        // onMouseEnter={() => setShowControl(true)}
-        // onMouseLeave={() => setShowControl(false)}
-        // onKeyDown={handleKeyDown}
-        // onMouseMove={handleMouseMove}
-        // hideCursor={hideCursor}
+        onMouseEnter={() => setShowControl(true)}
+        onMouseLeave={() => setShowControl(false)}
+        onKeyDown={handleKeyDown}
+        onMouseMove={handleMouseMove}
+        hideCursor={hideCursor}
         tabIndex={0}
       >
         {videoLoading === 2 ? <Spinner /> : null}
         <VideoWrapper
           ref={ref}
           width="100%"
-          // onClick={() => playEventHandler()}
-          // onTimeUpdate={() => {
-          //   if (currentTime === totalTime && videoElement) {
-          //     setIsPlaying(false);
-          //   }
-          // }}
+          onClick={() => playEventHandler()}
+          onTimeUpdate={() => {
+            if (currentTime === totalTime && videoElement) {
+              setIsPlaying(false);
+            }
+          }}
           controls={false}
         >
           <source ref={srcRef} src={srcOrigin} type="video/mp4" />
         </VideoWrapper>
-        {/* {isAdPlayed && !adTime.adLoaded && <AdNotice time={1} />} */}
+        {isAdPlayed && !adTime.adLoaded && <AdNotice time={1} />}
         <Controller
           totalTime={totalTime}
           currentTime={currentTime}
@@ -172,9 +172,9 @@ const Video = () => {
           srcElement={srcElement}
           srcOrigin={srcOrigin}
           srcAd={srcAd}
-          // isPlaying={isPlayingd
-          // showControl={showControl}
-          // setIsPlaying={setIsPlaying}
+          isPlaying={isPlaying}
+          showControl={showControl}
+          setIsPlaying={setIsPlaying}
         />
       </Container>
     </Layout>
@@ -185,9 +185,9 @@ export default memo(Video);
 
 const Container = styled.div<{ hideCursor?: boolean }>`
   position: relative;
-  /* ${(props) => {
+  ${(props) => {
     if (props.hideCursor) return "cursor : none;";
-  }} */
+  }}
   &:focus {
     border: none;
     outline: none;
