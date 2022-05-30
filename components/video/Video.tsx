@@ -10,11 +10,11 @@ import React, {
 } from "react";
 import { Layout } from "components/common/Layout";
 import styled from "styled-components";
-import Controller from "./Controller";
-import Spinner from "components/common/Spinner";
-import AdNotice from "./AdNotice";
+import Controls from "./Controls";
+import { ControllerInterface } from "util/PropsInterface";
 
 const Video = () => {
+<<<<<<< HEAD
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [showControl, setShowControl] = useState(false);
@@ -30,17 +30,38 @@ const Video = () => {
   const videoElement = ref && ref.current;
   // const currentTime = ref && ref.current && Math.floor(ref.current.currentTime);
   const totalTime = ref && ref.current && Math.floor(ref.current.duration);
+=======
+  const controllerRef = useRef<ControllerInterface>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+>>>>>>> refactor
   const srcRef = useRef<HTMLSourceElement>(null);
-  const srcElement = srcRef && srcRef.current;
-  // // video source 링크
+
+  // video source 링크
   const srcOrigin =
     "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
   const srcAd =
     "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
 
-  // 로딩 시 네트워크 상태. 1일 시 로딩 완료, 2일 시 로딩 중.
-  const videoLoading = videoElement?.networkState;
+  // container Props & handlers
+  const containerProps = {
+    ref: containerRef,
+    tabIndex: 0,
+    onKeyDown: (e: React.KeyboardEvent) => {
+      if (controllerRef.current) controllerRef.current.handleKeyDown(e);
+    },
+    onMouseEnter: () => {
+      if (controllerRef.current) controllerRef.current.handleMouseIn();
+    },
+    onMouseLeave: () => {
+      if (controllerRef.current) controllerRef.current.handleMouseLeave();
+    },
+    onMouseMove: (e: React.MouseEvent) => {
+      if (controllerRef.current) controllerRef.current.handleMouseMove(e);
+    },
+  };
 
+<<<<<<< HEAD
   //  클릭시 setState 이벤트 핸들러
   const playEventHandler = () => {
     if (!isPlaying) {
@@ -138,9 +159,33 @@ const Video = () => {
   // const adCounter = (a : number) : number => {
 
   // }
+=======
+  // video Prop & handlers
+  const videoProps = {
+    ref: videoRef,
+    width: "100%",
+    controls: false,
+    onTimeUpdate: () => {
+      if (controllerRef.current) controllerRef.current.handleTimeUpdate();
+    },
+    onClick: () => {
+      if (controllerRef.current) controllerRef.current.handleVideoClick();
+    },
+  };
+>>>>>>> refactor
 
+  // Controls Props
+  const controlProps = {
+    ref: controllerRef,
+    containerRef: containerRef,
+    videoRef: videoRef,
+    srcRef: srcRef,
+    srcOrigin: srcOrigin,
+    srcAd: srcAd,
+  };
   return (
     <Layout>
+<<<<<<< HEAD
       <Container
         id="container"
         onMouseEnter={() => setShowControl(true)}
@@ -176,18 +221,28 @@ const Video = () => {
           showControl={showControl}
           setIsPlaying={setIsPlaying}
         />
+=======
+      <Container {...containerProps}>
+        <VideoWrapper {...videoProps}>
+          <source ref={srcRef} src={srcOrigin} type="video/mp4" />
+        </VideoWrapper>
+        <Controls {...controlProps} />
+>>>>>>> refactor
       </Container>
     </Layout>
   );
 };
 
-export default memo(Video);
+export default Video;
 
-const Container = styled.div<{ hideCursor?: boolean }>`
+const Container = styled.div`
   position: relative;
+<<<<<<< HEAD
   ${(props) => {
     if (props.hideCursor) return "cursor : none;";
   }}
+=======
+>>>>>>> refactor
   &:focus {
     border: none;
     outline: none;
