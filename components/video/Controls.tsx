@@ -367,6 +367,10 @@ const Container = styled.div`
 
 const RangeStyle = styled.input`
   width: 100%;
+  outline: none;
+  &:focus {
+    outline: none;
+  }
 `;
 
 const TimeStamp = styled.p`
