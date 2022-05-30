@@ -12,11 +12,11 @@ const AdNotice = ({ time }: { time: number }) => {
 
 const Container = styled.div`
   position: absolute;
-  bottom: 10px;
+  bottom: 80px;
   right: 10px;
   ${theme.flexBox()};
-  width: 250px;
   height: 50px;
+  padding: 0 10px;
   background: #00000069;
   color: #fff;
   text-align: center;

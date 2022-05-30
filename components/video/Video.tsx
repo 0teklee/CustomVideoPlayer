@@ -10,44 +10,68 @@ import React, {
 } from "react";
 import { Layout } from "components/common/Layout";
 import styled from "styled-components";
-import Controller from "./Controller";
-import Spinner from "components/common/Spinner";
-import AdNotice from "./AdNotice";
+import Controls from "./Controls";
+import { ControllerInterface } from "util/PropsInterface";
 
 const Video = () => {
-  const videoContainerRef = useRef<HTMLDivElement>(null);
+  const controllerRef = useRef<ControllerInterface>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const srcRef = useRef<HTMLSourceElement>(null);
-  // const forwardRefProp = {
-  //   container: videoContainerRef,
-  //   video: videoRef,
-  //   src: srcRef,
-  // };
 
-  // // video source 링크
+  // video source 링크
   const srcOrigin =
     "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
   const srcAd =
     "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
 
-  // 로딩 시 네트워크 상태. 1일 시 로딩 완료, 2일 시 로딩 중.
-  const videoLoading = videoRef?.current?.networkState;
+  // container Props & handlers
+  const containerProps = {
+    ref: containerRef,
+    tabIndex: 0,
+    onKeyDown: (e: React.KeyboardEvent) => {
+      if (controllerRef.current) controllerRef.current.handleKeyDown(e);
+    },
+    onMouseEnter: () => {
+      if (controllerRef.current) controllerRef.current.handleMouseIn();
+    },
+    onMouseLeave: () => {
+      if (controllerRef.current) controllerRef.current.handleMouseLeave();
+    },
+    onMouseMove: (e: React.MouseEvent) => {
+      if (controllerRef.current) controllerRef.current.handleMouseMove(e);
+    },
+  };
+
+  // video Prop & handlers
+  const videoProps = {
+    ref: videoRef,
+    width: "100%",
+    controls: false,
+    onTimeUpdate: () => {
+      if (controllerRef.current) controllerRef.current.handleTimeUpdate();
+    },
+    onClick: () => {
+      if (controllerRef.current) controllerRef.current.handleVideoClick();
+    },
+  };
+
+  // Controls Props
+  const controlProps = {
+    ref: controllerRef,
+    containerRef: containerRef,
+    videoRef: videoRef,
+    srcRef: srcRef,
+    srcOrigin: srcOrigin,
+    srcAd: srcAd,
+  };
   return (
     <Layout>
-      <Container id="container" tabIndex={0} ref={videoContainerRef}>
-        {videoLoading === 2 ? <Spinner /> : null}
-        <VideoWrapper ref={videoRef} width="100%" controls={false}>
+      <Container {...containerProps}>
+        <VideoWrapper {...videoProps}>
           <source ref={srcRef} src={srcOrigin} type="video/mp4" />
         </VideoWrapper>
-        {/* {isAdPlayed && !adTime.adLoaded && <AdNotice time={1} />} */}
-        <Controller
-          // videoContainerRef={videoContainerRef}
-          // videoRef={videoRef}
-          srcRef={srcRef}
-          srcOrigin={srcOrigin}
-          srcAd={srcAd}
-          ref={videoRef}
-        />
+        <Controls {...controlProps} />
       </Container>
     </Layout>
   );
@@ -55,11 +79,8 @@ const Video = () => {
 
 export default Video;
 
-const Container = styled.div<{ hideCursor?: boolean }>`
+const Container = styled.div`
   position: relative;
-  /* ${(props) => {
-    if (props.hideCursor) return "cursor : none;";
-  }} */
   &:focus {
     border: none;
     outline: none;
