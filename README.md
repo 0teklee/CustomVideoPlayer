@@ -1,34 +1,33 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 코인고스트 2차 기업 과제
 
-## Getting Started
+## 커스텀 비디오 플레이어 제작
 
-First, run the development server:
+### 기술 스택
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+#### <img src="https://img.shields.io/badge/React-61dafb?style=flatsquare&logo=React&logoColor=white"> <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flatsquare&logo=TypeScript&logoColor=white"> <img src="https://img.shields.io/badge/Next.js-000000?style=flatsquare&logo=Next.js&logoColor=white">
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- React
+- TypeScript
+- Next.js
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### 기능 상세
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- 컨트롤바 on/off
+  - 영상 영역에서 마우스 이동시 컨트롤바 보이도록 구현
+  - 영상 영역에서 마우스가 사라질시 컨트롤바 제거
+  - 영상 영역에서 3초 동안 마우스가 아무 반응이 없을시 컨트롤바 제거
+- 크롬에서 m3u8 확장자 재생 되도록 기능 구현
+- 재생/ 정지 기능
+- 볼륨 조절 기능
+- 전체화면 ,축소 기능
+- 영상 전체길이 표기
+- 현재 보고있는 영상 시간 표기
+- 프로그레스바 클릭시 해당 시간으로 넘기기
+  - 넘기는 도중 영상이 load 중이라면 로딩UI 표시
+- 광고 기능 - 특정 시간경과시 광고영상으로 교체되고 광고가 끝날 시 다시 원래 영상보던 시간으로 돌아오기
+- 볼륨 음소거 on/off기능
+- 볼륨 아이콘 hover 시 볼륨 조절 기능 표시
+- keyDown event 이용해서 키보드 이벤트 구현
+  - 왼쪽 방향키 event - 영상 시간 -5초
+  - 오른쪽 방향키 event - 영상 시간 +5초
+  - 스페이스바 evnet - 영상 재생/정지 toggle
