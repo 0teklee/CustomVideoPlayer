@@ -21,10 +21,6 @@ export interface ControlsInterface {
   srcAd: string;
 }
 
-export interface VideoPropInterface {
-  videoRef: React.RefObject<HTMLVideoElement>;
-}
-
 export interface ControllerInterface {
   handleVideoClick: () => void;
   handleKeyDown: (e: React.KeyboardEvent) => void;

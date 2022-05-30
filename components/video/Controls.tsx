@@ -8,7 +8,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { ControlsInterface, VideoPropInterface } from "util/PropsInterface";
+import { ControlsInterface } from "util/PropsInterface";
 import styled from "styled-components";
 import Spinner from "components/common/Spinner";
 import Image from "next/image";
