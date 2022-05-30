@@ -86,6 +86,7 @@ const Controls = forwardRef(
       }
     };
 
+    // 비디오 클릭 시 재생/정지 핸들러
     const handleVideoClick = () => {
       if (videoElement) {
         if (videoElement.paused) {
@@ -98,6 +99,7 @@ const Controls = forwardRef(
       }
     };
 
+    // mouse event handlers - 마우스가 비디오 위에서 움직일 때 컨트롤바 보이게.
     const handleMouseMove = (e: React.MouseEvent) => {
       setShowControl(true);
       setHideCursor(false);
@@ -112,11 +114,12 @@ const Controls = forwardRef(
       setShowControl(false);
     };
 
+    // 동영상 시간 업데이트 핸들러
     const handleTimeUpdate = () => {
       setCurrent(videoElement?.currentTime || 0);
     };
 
-    // 타임아웃 useEffect
+    // 마우스 3초 이상 호버 시 컨트롤 바 안보이도록 타임아웃 useEffect
     useEffect(() => {
       const timeOut = setTimeout(() => {
         setShowControl(false);
