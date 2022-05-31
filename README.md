@@ -4,21 +4,21 @@
 
 ### 데모 영상
 
-**_ 비디오 컨트롤 바, 버튼 기능 구현 _**
+**비디오 컨트롤 바, 버튼 기능 구현**
 
 ### <img src="/customplay_controls.gif">
 
-**_ 키보드 컨트롤 기능 구현 _**
+**키보드 컨트롤 기능 구현**
 
-### <img src="/customplay_controls_keyboards.gif">
+### <img src="public/customplay_controls_keyboards.gif">
 
-**_ 광고 기능 구현 _**
+**광고 기능 구현**
 
-### <img src="/customplay_ads.gif">
+### <img src="public/customplay_ads.gif">
 
-**_ 볼륨 조절 토글 / 전체화면 기능 구현 _**
+**볼륨 조절 토글 / 전체화면 기능 구현 **
 
-### <img src="/customplay_volume_fullscreen.gif">
+### <img src="public/customplay_volume_fullscreen.gif">
 
 ### 기술 스택
 
