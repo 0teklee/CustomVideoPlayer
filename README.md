@@ -2,6 +2,8 @@
 
 ## 커스텀 비디오 플레이어 제작
 
+## [프로젝트 회고](https://velog.io/@leetekwoo/%EB%91%90%EB%B2%88%EC%A7%B8-%EC%9D%B8%ED%84%B4%EC%89%BD-%EA%B3%BC%EC%A0%9C-%ED%9A%8C%EA%B3%A0)
+
 ### 데모 영상
 
 **비디오 컨트롤 바, 버튼 기능 구현**
