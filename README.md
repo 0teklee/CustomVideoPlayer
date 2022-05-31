@@ -13,16 +13,12 @@
 **광고 기능 구현**
 ![ads](/public/customplay_ads.gif)
 
-**볼륨 조절 토글 / 전체화면 기능 구현**
+**볼륨 조절 토글, 전체화면 기능 구현**
 ![volume](/public/customplay_volume_fullscreen.gif)
 
 ### 기술 스택
 
 #### <img src="https://img.shields.io/badge/React-61dafb?style=flatsquare&logo=React&logoColor=white"> <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flatsquare&logo=TypeScript&logoColor=white"> <img src="https://img.shields.io/badge/Next.js-000000?style=flatsquare&logo=Next.js&logoColor=white">
-
-- React
-- TypeScript
-- Next.js
 
 ### 기능 상세
 
